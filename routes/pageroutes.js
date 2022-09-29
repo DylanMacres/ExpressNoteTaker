@@ -1,3 +1,11 @@
+
+//boiler plate for making the routes accessible
+const express = require('express');
+const router = express.router();
+const path = require('path');
+
+
+
 //if the url is in /notes it will show the notes html page
 app.get('/notes', (req, res) => 
     res.sendFile(path.join(__dirname, 'public/notes.html'))
@@ -14,3 +22,5 @@ app.get('/api/notes', (req,res) => {
 app.get('*', (req, res) => 
 res.sendFile(path.join(__dirname,'/public/index.html'))
 );
+
+module.exports = router; 
