@@ -3,8 +3,8 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-
-
+notes = require('../db/db.json');
+router.use("/api/notes", require("./notesdata"))
 
 //if the url is in /notes it will show the notes html page
 router.get('/notes', (req, res) => 
