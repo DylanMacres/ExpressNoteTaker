@@ -23,21 +23,25 @@ app.use(express.static('public'));
 
 
 //if the url is in /notes it will show the notes html page
-app.get('/notes', (req, res) => 
-    res.sendFile(path.join(__dirname, 'public/notes.html'))
-);
+// app.get('/notes', (req, res) => 
+//     res.sendFile(path.join(__dirname, 'public/notes.html'))
+// );
 
-//gathers the data from the notes 
-app.get('/api/notes', (req,res) => {
-    res.json(notes)
-});
+// //gathers the data from the notes 
+// app.get('/api/notes', (req,res) => {
+//     res.json(db)
+// });
 
 
 
-//added a catch all if the code gets this far without being executed
-app.get('*', (req, res) => 
-res.sendFile(path.join(__dirname,'/public/index.html'))
-);
+// //added a catch all if the code gets this far without being executed
+// app.get('*', (req, res) => 
+// res.sendFile(path.join(__dirname,'/public/index.html'))
+// );
+
+
+app.use(require('./routes'));
+
 
 //link to the http for the server
 app.listen(PORT, () => 
