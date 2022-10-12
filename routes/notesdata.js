@@ -1,16 +1,17 @@
 //boiler plate for making the routes accessible
+const { json } = require('express');
 const express = require('express');
 const { fstat } = require('fs');
 const router = express.router();
 const path = require('path');
-let db = require("./db/db.json");
+let dbFile = require("../db/db.json");
 
 
 
 
 //gathers the data from the notes 
 app.get('/api/notes', (req,res) => {
-    res.json(notes)
+    res.sendFile(path.join(__dirname, '../db/db.json'));
 });
 
 
@@ -20,7 +21,8 @@ app.get('/api/notes/:id', (req, res) => {
 });
 
 app.post("/api/notes", (req, res) => {
-    db = JSON.parse(db);
+  let db = fs.readFileSync('../db/db.json');
+  db = json.parse(db)
     res.json(db)
     let newNote = {
         id: uniqID(),
@@ -28,12 +30,14 @@ app.post("/api/notes", (req, res) => {
         text: req.body.text,
     };
     db.push(newNote);
-    fs.WriteFileSync(db,JSON.stringify(db));
+    fs.WriteFileSync("../db/db.json",JSON.stringify(db));
     res.json(db);
 });
 
 app.delete("/api/nots/:id", (req,res) => {
     const deleted =req.params.id;
-    const notes = JSON.parse(fs.readFileSync("./db/db.json"));
+    const notes = JSON.parse(fs.readFileSync("../db/db.json"));
+    const newNote = [];
+    
 
 })
