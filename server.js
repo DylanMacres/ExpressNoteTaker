@@ -7,9 +7,9 @@ const db = require('./db/db.json');
 
 
 //package for unique ids 
-let uniuqeId = require('generate-unique-id')
+const { v4: generateId } = require("uuid");
 
-const newId = uniuqeId({
+const newId = generateId({
     length:16,
     useLetters: false,
 });
@@ -32,7 +32,7 @@ app.use(express.static('public'));
 
 
 app.get("/api/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, '../db/db.json'));
+    res.sendFile(path.join(__dirname, '/db/db.json'));
 });
 
 
@@ -80,7 +80,7 @@ res.sendFile(path.join(__dirname,'/public/index.html'))
 );
 
 
-app.use(require('./routes'));
+
 
 
 //link to the http for the server
