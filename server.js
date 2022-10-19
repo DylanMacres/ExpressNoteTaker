@@ -7,12 +7,18 @@ const db = require('./db/db.json');
 
 
 //package for unique ids 
-const { v4: generateId } = require("uuid");
+const uuid = require("uuid");
 
-const newId = generateId({
-    length:16,
-    useLetters: false,
-});
+// const newId = generateId({
+//     length:16,
+//     useLetters: false,
+// });
+
+
+//function for filesync to make it easier
+function dbfilesync(arr){
+    fs.writeFileSync("./db/db.json", JSON.stringify(arr));
+};
 
 //boiler plate code
 //and the port number that im using 
@@ -32,30 +38,51 @@ app.use(express.static('public'));
 
 
 app.get("/api/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, '/db/db.json'));
+   res.json(db)
 });
 
+
+app.post("/api/notes", (req,res) => {
+    let note = req.body;
+    note.id = uuid.v1();
+    db.push(note);
+    dbfilesync(db);
+    return res.json(db);
+});
+
+
+app.delete("/api/notes/:id", (req,res) => {
+    let id = req.params.id;
+    for (let i = 0; i<db.length; i++){
+        if(db[i].id == id){
+            db.splice(i,1);
+            dbfilesync(db);
+            res.json(db);
+            break;
+        }
+    }
+});
 
 //gathers the data from the notes 
-app.get('/api/notes', (req,res) => {
-    let readfiledb = fs.readFileSync(db);
-   readfiledb = JSON.parse(readfiledb); 
-    res.json(readfiledb)
+// app.get('/api/notes', (req,res) => {
+//     let readfiledb = fs.readFileSync(db);
+//    readfiledb = JSON.parse(readfiledb); 
+//     res.json(readfiledb)
 
-    let note = {
-        title: req.body.title,
-        id: newId(),
-        text: req.body.text,
-    };
-    readfiledb.push(note);
-    fs.writeFileSync(db, JSON.stringify(readfiledb));
-    res.json(readfiledb)
-});
+//     let note = {
+//         title: req.body.title,
+//         id: newId(),
+//         text: req.body.text,
+//     };
+//     readfiledb.push(note);
+//     fs.writeFileSync(db, JSON.stringify(readfiledb));
+//     res.json(readfiledb)
+// });
 
 //same get response but with unique id assigned
-app.get('/api/notes/:id', (req,res) => {
-    res.json(db)
-});
+// app.get('/api/notes/:id', (req,res) => {
+//     res.json(db)
+// });
 
 // app.post("/api/notes", (req,res) => {
 //     urlId = 
