@@ -9,13 +9,8 @@ const db = require('./db/db.json');
 //package for unique ids 
 const uuid = require("uuid");
 
-// const newId = generateId({
-//     length:16,
-//     useLetters: false,
-// });
 
-
-//function for filesync to make it easier
+//function for filesync to make cleaner code and easier to read
 function dbfilesync(arr){
     fs.writeFileSync("./db/db.json", JSON.stringify(arr));
 };
@@ -29,19 +24,19 @@ const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use('/', routes );
+
 
 
 //makes the html webpage static 
 app.use(express.static('public'));
 
 
-
+//getting the database data
 app.get("/api/notes", (req, res) => {
    res.json(db)
 });
 
-
+//posting the filesync to the data of the notes page and creating a note id for it
 app.post("/api/notes", (req,res) => {
     let note = req.body;
     note.id = uuid.v1();
@@ -50,7 +45,7 @@ app.post("/api/notes", (req,res) => {
     return res.json(db);
 });
 
-
+//deleting the notes that are saved with certain ids
 app.delete("/api/notes/:id", (req,res) => {
     let id = req.params.id;
     for (let i = 0; i<db.length; i++){
@@ -63,52 +58,16 @@ app.delete("/api/notes/:id", (req,res) => {
     }
 });
 
-//gathers the data from the notes 
-// app.get('/api/notes', (req,res) => {
-//     let readfiledb = fs.readFileSync(db);
-//    readfiledb = JSON.parse(readfiledb); 
-//     res.json(readfiledb)
-
-//     let note = {
-//         title: req.body.title,
-//         id: newId(),
-//         text: req.body.text,
-//     };
-//     readfiledb.push(note);
-//     fs.writeFileSync(db, JSON.stringify(readfiledb));
-//     res.json(readfiledb)
-// });
-
-//same get response but with unique id assigned
-// app.get('/api/notes/:id', (req,res) => {
-//     res.json(db)
-// });
-
-// app.post("/api/notes", (req,res) => {
-//     urlId = 
-
-// })
-
-
 //all the webage code to make sur we get the right page
 // if the url is in /notes it will show the notes html page
 app.get('/notes', (req, res) => 
     res.sendFile(path.join(__dirname, 'public/notes.html'))
 );
 
-//gathers the data from the notes 
-
-
-
-
 //added a catch all if the code gets this far without being executed
 app.get('*', (req, res) => 
 res.sendFile(path.join(__dirname,'/public/index.html'))
 );
-
-
-
-
 
 //link to the http for the server
 app.listen(PORT, () => 
