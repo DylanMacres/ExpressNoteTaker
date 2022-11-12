@@ -1,4 +1,4 @@
-# Team Profile Generator
+# Express Note Taker App
     
   ## Description
  AS A small business owner
